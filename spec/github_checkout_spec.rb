@@ -21,6 +21,13 @@ describe GithubCheckout do
       end
     end
 
+    it "should accept github URLs with http auth" do
+      git("https://025c585e8cdfbc1225649a8f844b1b36bacdb56f:x-oauth-basic@github.com/private-org/private-repo.git")
+      @git.oauth_token.should == '025c585e8cdfbc1225649a8f844b1b36bacdb56f'
+      @git.project.should == 'private-repo'
+      @git.name.should == 'private-org/private-repo'
+    end
+
     it "should accept github URLs with ending in .git" do
       git("git://github.com/lsegal/yard.git")
       @git.username.should == "lsegal"

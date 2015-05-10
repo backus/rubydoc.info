@@ -90,7 +90,7 @@ class ScmCheckout
 end
 
 class GithubCheckout < ScmCheckout
-  attr_accessor :username, :project
+  attr_accessor :oauth_token, :username, :project
 
   def initialize(app, url, commit = nil)
     super
@@ -99,6 +99,8 @@ class GithubCheckout < ScmCheckout
       self.username, self.project = *url
     when %r{^(?:https?|git)://(?:www\.?)?github\.com/([^/]+)/([^/]+?)(?:\.git)?/?$}
       self.username, self.project = $1, $2
+    when %r{^(?:https?|git)://([0-9a-f]{40}):(?:x\-oauth\-basic@)github\.com/([^/]+)/([^/]+?)(?:\.git)?/?$}
+      self.oauth_token, self.username, self.project = $1, $2, $3
     else
       raise InvalidSchemeError
     end
