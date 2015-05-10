@@ -36,6 +36,10 @@ end
 class DocServer < Sinatra::Base
   include YARD::Server
 
+  use Rack::Auth::Basic, "Restricted Area" do |username, password|
+    username == ENV['RUBYDOC_USERNAME'] and password == ENV['RUBYDOC_PASSWORD']
+  end
+
   def self.adapter_options
     caching = %w(staging production).include?(ENV['RACK_ENV']) ? $CONFIG.caching : false
     {
